@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 21:31:12 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/11/30 12:32:07 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/01 13:23:14 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,17 @@ typedef struct	s_state	{
 
 	int		diff;
 
-	float		x_step;
-	float		y_step;
-	float		prev_x_step;
-	float		prev_y_step;
+	float	x_step;
+	float	y_step;
+	float	prev_x_step;
+	float	prev_y_step;
 
 	float 	left;
 	float	right;
 	float	top;
 	float	bottom;
+
+	int color1;
 
 	void	*img;
 	char	*addr;
@@ -52,7 +54,7 @@ typedef struct	s_state	{
 }				t_state;
 
 void	ft_mandelbrot(t_state	*state, int x, int y);
-int		render_next_frame(void *state);
-void	ft_freeall(t_state *state);
+int		render_next_frame(t_state *state);
+// void	ft_freeall(t_state *state);
 
 #endif

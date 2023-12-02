@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/11/30 12:57:23 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/02 16:12:47 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,15 +157,15 @@ int	ft_handle_mouse(int key, int x, int y, void *param)
 	return (0);
 }
 
-void	ft_freeall(t_state *state)
-{
-	(void)state;
-	// mlx_clear_window(state->mlx, state->win);
-	// mlx_destroy_window(state->mlx, state->win);
-	// free(state->mlx);
-	// free(state->win);
-	// free(state->img);
-}
+// void	ft_freeall(t_state *state)
+// {
+// 	(void)state;
+// 	// mlx_clear_window(state->mlx, state->win);
+// 	// mlx_destroy_window(state->mlx, state->win);
+// 	// free(state->mlx);
+// 	// free(state->win);
+// 	// free(state->img);
+// }
 
 /*
 for each pixel (Px, Py) on the screen do
@@ -185,12 +185,12 @@ for each pixel (Px, Py) on the screen do
     plot(Px, Py, color)
 */
 
-float	ft_abs(float n)
-{
-	if (n < 0)
-		n = -n;
-	return (n);
-}
+// float	ft_abs(float n)
+// {
+// 	if (n < 0)
+// 		n = -n;
+// 	return (n);
+// }
 
 int	ft_check_point(float x0, float y0)
 {
@@ -270,7 +270,7 @@ void	ft_mandelbrot(t_state	*state, int x, int y)
 
 	// int color = 0x00FF0000;
 	// int color1 = 0x00CCCCCC;
-	int color1 = 0x00000000;
+	// int color1 = 0x00000000;
 	// int color2 = 0x006688CC;
 	int color2 = 0xFFFFFFFF;
 	// int color = 0x00000000;
@@ -286,7 +286,8 @@ void	ft_mandelbrot(t_state	*state, int x, int y)
 			if (ft_check_point(curr_x, curr_y) == 90)
 				custom_mlx_pixel_put(state, px_x, px_y, color2);
 			else
-				custom_mlx_pixel_put(state, px_x, px_y, color1 + iter*iter*1000);
+				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 + iter*iter*1000);
+				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter);
 			px_y += 1;
 			// color += 1;
 			curr_y -= state->y_step;
@@ -309,6 +310,14 @@ void	ft_mandelbrot(t_state	*state, int x, int y)
 // 4294967295
 // 1000000000
 
+int	render_next_frame(t_state *state)
+{
+	state->color1 += 256;
+	ft_mandelbrot(state, 0, 0);
+	state->zoom = 1;
+	return (0);
+}
+
 int	main(void)
 {
 	t_state	state;
@@ -326,6 +335,7 @@ int	main(void)
 	state.zoom_count = 0;
 	state.prev_x_step = 0;
 	state.prev_y_step = 0;
+	state.color1 = 0x00000000;
 
 	state.mlx = mlx_init();
 	if (!state.mlx)
@@ -364,17 +374,12 @@ int	main(void)
 	mlx_mouse_hook(state.win, ft_handle_mouse, &state);
 
 
-	// mlx_loop_hook(state.mlx, render_next_frame, hello);
+	mlx_loop_hook(state.mlx, render_next_frame, &state);
 	mlx_loop(state.mlx);
 
-	ft_freeall(&state);
+	// ft_freeall(&state);
 	return (0);
 }
-
-// int	render_next_frame(void *state)
-// {
-// 	return (0);
-// }
 
 /*
        void *

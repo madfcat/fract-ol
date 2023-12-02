@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 21:31:12 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/01 13:23:14 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/02 17:27:09 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 typedef struct	s_state	{
 	void	*mlx;
 	void	*win;
-	float	width;
-	float	height;
-	float	zoom;
-	float	prev_zoom;
+	double	width;
+	double	height;
+	double	zoom;
+	double	prev_zoom;
 	int		zoom_count;
 	int		mouse_x;
 	int		mouse_y;
@@ -34,15 +34,15 @@ typedef struct	s_state	{
 
 	int		diff;
 
-	float	x_step;
-	float	y_step;
-	float	prev_x_step;
-	float	prev_y_step;
+	double	x_step;
+	double	y_step;
+	double	prev_x_step;
+	double	prev_y_step;
 
-	float 	left;
-	float	right;
-	float	top;
-	float	bottom;
+	double 	left;
+	double	right;
+	double	top;
+	double	bottom;
 
 	int color1;
 
@@ -53,8 +53,9 @@ typedef struct	s_state	{
 	int		endian;
 }				t_state;
 
-void	ft_mandelbrot(t_state	*state, int x, int y);
+void	ft_mandelbrot(t_state	*state);
 int		render_next_frame(t_state *state);
+void	ft_output_fractal(t_state	*state);
 // void	ft_freeall(t_state *state);
 
 #endif

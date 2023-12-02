@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/02 16:12:47 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/02 17:56:41 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	ft_handle_key(int key, t_state *state)
 		state->left += 10*state->x_step;
 		state->right += 10*state->x_step;
 	}
-	ft_mandelbrot(state, state->mouse_x, state->mouse_y);
+	ft_output_fractal(state);
 	return (0);
 }
 
@@ -119,7 +119,9 @@ int	ft_handle_close(t_state *state)
 
 int	ft_handle_mouse(int key, int x, int y, void *param)
 {
-	// float z;
+	(void)x;
+	(void)y;
+	// double z;
 	t_state	*state = param;
 	ft_putnbr_fd(key, 1);
 	ft_putstr_fd("\n", 1);
@@ -137,7 +139,7 @@ int	ft_handle_mouse(int key, int x, int y, void *param)
 		printf("Zoom = %f\n", state->zoom);
 		// ft_putstr_fd(hello, 1);
 		ft_putstr_fd("Scroll up!\n", 1);
-		ft_mandelbrot(state, x, y);
+		ft_output_fractal(state);
 	}
 	if (key == 5)
 	{
@@ -152,7 +154,7 @@ int	ft_handle_mouse(int key, int x, int y, void *param)
 		printf("Zoom = %f\n", state->zoom);
 		// ft_putstr_fd(hello, 1);
 		ft_putstr_fd("Scroll down!\n", 1);
-		ft_mandelbrot(state, x, y);
+		ft_output_fractal(state);
 	}
 	return (0);
 }
@@ -185,52 +187,31 @@ for each pixel (Px, Py) on the screen do
     plot(Px, Py, color)
 */
 
-// float	ft_abs(float n)
+// double	ft_abs(double n)
 // {
 // 	if (n < 0)
 // 		n = -n;
 // 	return (n);
 // }
 
-int	ft_check_point(float x0, float y0)
-{
-	float	x;
-	float	y;
-	int	iter;
-	float x_temp;
-	
-	x = 0;
-	y = 0;
-	iter = 0;
-	while (x * x + y * y <= 2 * 2 && iter < 90)
-	{
-		x_temp = x * x - y * y + x0;
-		y = 2 * x * y + y0;
-		x = x_temp;
-		iter += 1;
-		// if (iter > 1)
-		// 	printf("Iter: %d\n", iter);
-	}
-	return (iter);
-}
 
-
-void	ft_mandelbrot(t_state	*state, int x, int y)
+void	ft_print_stats(t_state	*state)
 {
-	float	curr_x;
-	float	curr_y;
-	// float	x_step;
-	// float	y_step;
-	int		px_x;
-	int		px_y;
 	char	*zoom_text;
 	char	*temp;
-	float	coord_x;
-	float	coord_y;
-	(void)x;
-	(void)y;
 
-	mlx_clear_window(state->mlx, state->win);
+	temp = ft_itoa(state->zoom_count);
+	zoom_text = ft_strjoin("Zoom: ", temp);
+	mlx_string_put(state->mlx, state->win, 20, 40, 0xFFFFFF, zoom_text);
+	free(zoom_text);
+	free(temp);
+}
+
+void	ft_zoom_fractal(t_state *state)
+{
+	double	coord_x;
+	double	coord_y;
+
 	state->prev_mouse_x = state->mouse_x;
 	state->prev_mouse_y = state->mouse_y;
 
@@ -262,18 +243,44 @@ void	ft_mandelbrot(t_state	*state, int x, int y)
 		state->right = (state->width - state->mouse_x) * state->x_step + coord_x;
 		state->left = state->right - state->width*state->x_step;
 	}
+}
+
+int	ft_check_point(double x0, double y0)
+{
+	double	x;
+	double	y;
+	int		iter;
+	double	x_temp;
+
+	x = 0;
+	y = 0;
+	iter = 0;
+	while (x * x + y * y <= 2 * 2 && iter < 90)
+	{
+		x_temp = x * x - y * y + x0;
+		y = 2 * x * y + y0;
+		x = x_temp;
+		iter += 1;
+	}
+	return (iter);
+}
+
+void	ft_mandelbrot(t_state	*state)
+{
+	double	curr_x;
+	double	curr_y;
+	// double	x_step;
+	// double	y_step;
+	int		px_x;
+	int		px_y;
+	int color2;
 
 	px_x = 0;
 	px_y = 0;
 	curr_x = state->left;
 	curr_y = state->top;
+	color2 = 0xFFFFFFFF;
 
-	// int color = 0x00FF0000;
-	// int color1 = 0x00CCCCCC;
-	// int color1 = 0x00000000;
-	// int color2 = 0x006688CC;
-	int color2 = 0xFFFFFFFF;
-	// int color = 0x00000000;
 	while (px_x < state->width)
 	{
 		px_y = 0;
@@ -296,14 +303,101 @@ void	ft_mandelbrot(t_state	*state, int x, int y)
 		px_x += 1;
 		curr_x += state->x_step;
 	}
+}
+
+// R = escape radius  # choose R > 0 such that R**2 - R >= sqrt(cx**2 + cy**2)
+
+// for each pixel (x, y) on the screen, do:   
+// {
+//     zx = scaled x coordinate of pixel; # (scale to be between -R and R)
+//        # zx represents the real part of z.
+//     zy = scaled y coordinate of pixel; # (scale to be between -R and R)
+//        # zy represents the imaginary part of z.
+
+//     iteration = 0;
+//     max_iteration = 1000;
+  
+//     while (zx * zx + zy * zy < R**2  AND  iteration < max_iteration) 
+//     {
+//         xtemp = zx * zx - zy * zy;
+//         zy = 2 * zx * zy  + cy;
+//         zx = xtemp + cx;
+    
+//         iteration = iteration + 1;
+//     }
+  
+//     if (iteration == max_iteration)
+//         return black;
+//     else
+//         return iteration;
+// }
+
+int	ft_check_point_j(double x, double y)
+{
+	// double	x;
+	// double	y;
+	int		iter;
+	double	x_temp;
+	double r = 7.5;
+	double cx = -0.835;
+	double cy = -0.321;
+	double r2 = sqrt(cx*cx + cy*cy) + r + 3;
+
+	// printf("R2: %f\n", r2);
+	iter = 0;
+	while (x * x + y * y <= r2 && iter < 90)
+	{
+		x_temp = x * x - y * y;
+		y = 2 * x * y + cy;
+		x = x_temp + cx;
+		iter += 1;
+	}
+	// printf("Iter: %d\n", iter);
+	return (iter);
+}
+
+void	ft_julia(t_state	*state)
+{
+	double	curr_x;
+	double	curr_y;
+	int		px_x;
+	int		px_y;
+	int color2;
+
+	px_x = 0;
+	px_y = 0;
+	curr_x = state->left;
+	curr_y = state->top;
+	color2 = 0x00000000;
+
+	while (px_x < state->width)
+	{
+		px_y = 0;
+		curr_y = state->top;
+		while (px_y < state->height)
+		{
+			int iter = ft_check_point_j(curr_x, curr_y);
+			if (iter == 90)
+				custom_mlx_pixel_put(state, px_x, px_y, color2);
+			else
+				custom_mlx_pixel_put(state, px_x, px_y, state->color1 + iter * iter * 1000);
+			px_y += 1;
+			curr_y -= state->y_step;
+		}
+		// color += 0x00010000;
+		px_x += 1;
+		curr_x += state->x_step;
+	}
+}
+
+void	ft_output_fractal(t_state	*state)
+{
+	ft_zoom_fractal(state);
+	mlx_clear_window(state->mlx, state->win);
+	// ft_mandelbrot(state);
+	ft_julia(state);
 	mlx_put_image_to_window(state->mlx, state->win, state->img, 0, 0);
-	// mlx_string_put(state->mlx, state->win, 50, 80, 0xFFFFFF, "Zoom x 1");
-	temp = ft_itoa(state->zoom_count);
-	zoom_text = ft_strjoin("Zoom: ", temp);
-	mlx_string_put(state->mlx, state->win, 20, 40, 0xFFFFFF, zoom_text);
-	free(zoom_text);
-	free(temp);
-	// mlx_string_put(state->mlx, state->win, 50, 50, 0xFFFFFF, "Hello, MiniLibX!");
+	ft_print_stats(state);
 	state->prev_x_step = state->x_step;
 	state->prev_y_step = state->y_step;
 }
@@ -312,8 +406,9 @@ void	ft_mandelbrot(t_state	*state, int x, int y)
 
 int	render_next_frame(t_state *state)
 {
-	state->color1 += 256;
-	ft_mandelbrot(state, 0, 0);
+	(void)state;
+	state->color1 += 1;
+	ft_output_fractal(state);
 	state->zoom = 1;
 	return (0);
 }
@@ -328,10 +423,17 @@ int	main(void)
 	state.mouse_x = 0;
 	state.mouse_y = 0;
 	// state.zoom = 1.1;
+/* 	// Mandelbrot
 	state.left = -2.00;
 	state.right = 2.00;
 	state.top = 2.00;
-	state.bottom = -2.00;
+	state.bottom = -2.00; */
+	//Julia
+	state.left = -3.50;
+	state.right = 3.50;
+	state.top = 3.50;
+	state.bottom = -3.50;
+	
 	state.zoom_count = 0;
 	state.prev_x_step = 0;
 	state.prev_y_step = 0;
@@ -364,7 +466,7 @@ int	main(void)
 	custom_mlx_pixel_put(&img, 5, 10, 0x00FF0000);
 								*/
 	// mlx_put_image_to_window(state.mlx, state.win, state.img, 0, 0);
-	ft_mandelbrot(&state, state.width/2, state.height/2);
+	ft_output_fractal(&state);
 
 	// Pressing ESC must close the window and quit the program in a clean way.
 	mlx_key_hook(state.win, ft_handle_key, &state);

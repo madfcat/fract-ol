@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/02 17:56:41 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 20:30:28 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,35 @@ int	ft_handle_key(int key, t_state *state)
 	{
 		state->left += 10*state->x_step;
 		state->right += 10*state->x_step;
+	}
+	if (key == 7)
+	{
+		state->color1 += 9999;
+	}
+	if (key == 8)
+	{
+		state->pause = abs(state->pause - 1);
+		printf("Key: %d, Pause: %d", key, state->pause );
+	}
+	if (key == 9)
+	{
+		state->color1 -= 9999;
+	}
+	if (key == 27)
+	{
+		state->cx -= 0.01;
+	}
+	if (key == 24)
+	{
+		state->cx += 0.01;
+	}
+	if (key == 33)
+	{
+		state->cy -= 0.01;
+	}
+	if (key == 30)
+	{
+		state->cy += 0.01;
 	}
 	ft_output_fractal(state);
 	return (0);
@@ -332,24 +361,22 @@ void	ft_mandelbrot(t_state	*state)
 //         return iteration;
 // }
 
-int	ft_check_point_j(double x, double y)
+int	ft_check_point_j(t_state *state, double x, double y)
 {
 	// double	x;
 	// double	y;
 	int		iter;
 	double	x_temp;
 	double r = 7.5;
-	double cx = -0.835;
-	double cy = -0.321;
-	double r2 = sqrt(cx*cx + cy*cy) + r + 3;
+	double r2 = sqrt(state->cx*state->cx + state->cy*state->cy) + r;
 
 	// printf("R2: %f\n", r2);
 	iter = 0;
 	while (x * x + y * y <= r2 && iter < 90)
 	{
 		x_temp = x * x - y * y;
-		y = 2 * x * y + cy;
-		x = x_temp + cx;
+		y = 2 * x * y + state->cy;
+		x = x_temp + state->cx;
 		iter += 1;
 	}
 	// printf("Iter: %d\n", iter);
@@ -376,11 +403,14 @@ void	ft_julia(t_state	*state)
 		curr_y = state->top;
 		while (px_y < state->height)
 		{
-			int iter = ft_check_point_j(curr_x, curr_y);
+			int iter = ft_check_point_j(state, curr_x, curr_y);
 			if (iter == 90)
 				custom_mlx_pixel_put(state, px_x, px_y, color2);
 			else
-				custom_mlx_pixel_put(state, px_x, px_y, state->color1 + iter * iter * 1000);
+				// custom_mlx_pixel_put(state, px_x, px_y, pow(state->color1, 2) - pow(iter, 2));
+				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 / 90 * iter / 10 + 2 * iter*iter);
+				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
+				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
 			px_y += 1;
 			curr_y -= state->y_step;
 		}
@@ -390,12 +420,94 @@ void	ft_julia(t_state	*state)
 	}
 }
 
+double ft_tri_area(double a[2], double b[2], double c[2])
+{
+	double area;
+
+	area = 0.5 * fabs(a[0] * (b[1] - c[1]) 
+				+ b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1]));
+	return (area);
+}
+
+int	ft_check_point_s(double a[2], double b[2], double c[2], double dot[2])
+{
+	double u;
+	double v;
+	double w;
+
+	u = ft_tri_area(b, c, dot) / ft_tri_area(a, b, c);
+	v = ft_tri_area(c, a, dot) / ft_tri_area(a, b, c);
+	w = ft_tri_area(a, b, dot) / ft_tri_area(a, b, c);
+	if ((u > 0 && u <= 1) && (v > 0 && v <= 1) && (w > 0 && w <= 1) && (u + v + w <= 1.0000000000000001))
+		return (1);
+	return (0);
+}
+
+int	ft_serp_hole(double a[2], double b[2], double c[2], t_state *state)
+{
+	if (state->iter == 10)
+	{
+		state->iter = 0;
+		return (0);
+	}
+	state->d[0] = (c[0] - a[0]) / 4 + a[0];
+	state->d[1] = (b[1] - a[1]) / 2 + a[1];
+	state->e[1] = state->d[1];
+	state->e[0] = c[0] - (c[0] - a[0]) / 4;
+	state->f[0] = b[0];
+	state->f[1] = a[1];
+
+	state->iter += 1;
+
+	// ft_serp_hole(state->d, b, state->e, state);
+	// ft_serp_hole(a, state->d, state->f, state);
+	// ft_serp_hole(state->f, state->e, c, state);
+
+	return (0);
+}
+
+void ft_serpinski(t_state *state)
+{
+	double	curr[2];
+	int		px_x;
+	int		px_y;
+	int 	color2;
+	int		iter;
+
+	px_x = 0;
+	px_y = 0;
+	curr[0] = state->left;
+	curr[1] = state->top;
+	color2 = 0x00000000;
+	iter = 0;
+	iter++;
+	while (px_x < state->width && iter == 1)
+	{
+		px_y = 0;
+		curr[1] = state->top;
+		while (px_y < state->height)
+		{
+			if (ft_check_point_s(state->a, state->b, state->c, curr))
+				custom_mlx_pixel_put(state, px_x, px_y, color2);
+			else
+				custom_mlx_pixel_put(state, px_x, px_y, state->color1);
+			px_y += 1;
+			curr[1] -= state->y_step;
+		}
+		// color += 0x00010000;
+		px_x += 1;
+		curr[0] += state->x_step;
+	}
+	ft_serp_hole(state->a, state->b, state->c, state);
+}
+
 void	ft_output_fractal(t_state	*state)
 {
 	ft_zoom_fractal(state);
 	mlx_clear_window(state->mlx, state->win);
 	// ft_mandelbrot(state);
-	ft_julia(state);
+	// ft_julia(state);
+	ft_serpinski(state);
 	mlx_put_image_to_window(state->mlx, state->win, state->img, 0, 0);
 	ft_print_stats(state);
 	state->prev_x_step = state->x_step;
@@ -406,10 +518,20 @@ void	ft_output_fractal(t_state	*state)
 
 int	render_next_frame(t_state *state)
 {
-	(void)state;
-	state->color1 += 1;
-	ft_output_fractal(state);
-	state->zoom = 1;
+	if (!state->pause)
+	{
+		state->frame += 1;
+		// (void)state;
+		if (state->frame % 5 == 0)
+			state->color1 += 9999;
+		ft_output_fractal(state);
+		state->zoom = 1;
+	}
+	else {
+		ft_output_fractal(state);
+		state->pause = 1;
+		state->zoom = 1;
+	}
 	return (0);
 }
 
@@ -429,15 +551,38 @@ int	main(void)
 	state.top = 2.00;
 	state.bottom = -2.00; */
 	//Julia
-	state.left = -3.50;
-	state.right = 3.50;
-	state.top = 3.50;
-	state.bottom = -3.50;
+	// state.left = -2.50;
+	// state.right = 2.50;
+	// state.top = 2.50;
+	// state.bottom = -2.50;
+	state.cx = -0.135;
+	state.cy = -0.721;
+
+	// Serpinski
+	state.left = -0.5;
+	state.right = 2.5;
+	state.top = 2.5;
+	state.bottom = -0.5;
+	state.a[0] = 0;
+	state.a[1] = 0;
+	state.b[0] = 1;
+	state.b[1] = sqrt(3);
+	state.c[0] = 2;
+	state.c[1] = 0;
+
 	
 	state.zoom_count = 0;
 	state.prev_x_step = 0;
 	state.prev_y_step = 0;
-	state.color1 = 0x00000000;
+	// state.color1 = 0x00000000;
+	// state.color1 = 0xFFFFFFFF;
+	state.color1 = 9999;
+
+	state.frame = 0;
+
+	state.pause = 1;
+	// state.fix = 0;
+
 
 	state.mlx = mlx_init();
 	if (!state.mlx)

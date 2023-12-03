@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 21:31:12 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/02 17:27:09 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 20:16:21 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,27 @@ typedef struct	s_state	{
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+
+	int frame;
+	int	pause;
+	int fix;
+
+	//Julia
+	double	cx;
+	double	cy;
+
+	// Serpinski
+	double a[2];
+	double b[2];
+	double c[2];
+	double prev_a[2];
+	double prev_b[2];
+	double prev_c[2];
+	double d[2];
+	double e[2];
+	double f[2];
+	int		iter;
+
 }				t_state;
 
 void	ft_mandelbrot(t_state	*state);

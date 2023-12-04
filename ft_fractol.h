@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 21:31:12 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/03 20:16:21 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/04 13:43:05 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include <math.h>
 # include "libft/libft.h"
 
-typedef struct	s_state	{
+// Define a function signature
+typedef int	(*t_ft)();
+
+typedef struct s_state {
 	void	*mlx;
 	void	*win;
 	double	width;
@@ -39,12 +42,15 @@ typedef struct	s_state	{
 	double	prev_x_step;
 	double	prev_y_step;
 
-	double 	left;
+	int		iter;
+
+	double	left;
 	double	right;
 	double	top;
 	double	bottom;
 
-	int color1;
+	int		color1;
+	int		color2;
 
 	void	*img;
 	char	*addr;
@@ -52,31 +58,21 @@ typedef struct	s_state	{
 	int		line_length;
 	int		endian;
 
-	int frame;
-	int	pause;
-	int fix;
+	int		frame;
+	int		pause;
+	int		fix;
 
 	//Julia
 	double	cx;
 	double	cy;
 
-	// Serpinski
-	double a[2];
-	double b[2];
-	double c[2];
-	double prev_a[2];
-	double prev_b[2];
-	double prev_c[2];
-	double d[2];
-	double e[2];
-	double f[2];
-	int		iter;
-
+	t_ft	ft_check_point;
 }				t_state;
 
 void	ft_mandelbrot(t_state	*state);
 int		render_next_frame(t_state *state);
 void	ft_output_fractal(t_state	*state);
 // void	ft_freeall(t_state *state);
+void ft_print_white(double curr_d[2], double curr_e[2], double curr_f[2], t_state *state);
 
 #endif

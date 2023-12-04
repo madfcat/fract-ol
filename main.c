@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/03 20:30:28 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/04 13:48:25 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,13 +274,14 @@ void	ft_zoom_fractal(t_state *state)
 	}
 }
 
-int	ft_check_point(double x0, double y0)
+int	ft_check_point_m(t_state *state, double x0, double y0)
 {
 	double	x;
 	double	y;
 	int		iter;
 	double	x_temp;
 
+	(void)state;
 	x = 0;
 	y = 0;
 	iter = 0;
@@ -294,45 +295,45 @@ int	ft_check_point(double x0, double y0)
 	return (iter);
 }
 
-void	ft_mandelbrot(t_state	*state)
-{
-	double	curr_x;
-	double	curr_y;
-	// double	x_step;
-	// double	y_step;
-	int		px_x;
-	int		px_y;
-	int color2;
+// void	ft_mandelbrot(t_state	*state)
+// {
+// 	double	curr_x;
+// 	double	curr_y;
+// 	// double	x_step;
+// 	// double	y_step;
+// 	int		px_x;
+// 	int		px_y;
+// 	int color2;
 
-	px_x = 0;
-	px_y = 0;
-	curr_x = state->left;
-	curr_y = state->top;
-	color2 = 0xFFFFFFFF;
+// 	px_x = 0;
+// 	px_y = 0;
+// 	curr_x = state->left;
+// 	curr_y = state->top;
+// 	color2 = 0xFFFFFFFF;
 
-	while (px_x < state->width)
-	{
-		px_y = 0;
-		curr_y = state->top;
-		while (px_y < state->height)
-		{
-			// if (px_y > state->height / 2)
-			// 	custom_mlx_pixel_put(img, px_x, px_y, color2);
-			int iter = ft_check_point(curr_x, curr_y);
-			if (ft_check_point(curr_x, curr_y) == 90)
-				custom_mlx_pixel_put(state, px_x, px_y, color2);
-			else
-				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 + iter*iter*1000);
-				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter);
-			px_y += 1;
-			// color += 1;
-			curr_y -= state->y_step;
-		}
-		// color += 0x00010000;
-		px_x += 1;
-		curr_x += state->x_step;
-	}
-}
+// 	while (px_x < state->width)
+// 	{
+// 		px_y = 0;
+// 		curr_y = state->top;
+// 		while (px_y < state->height)
+// 		{
+// 			// if (px_y > state->height / 2)
+// 			// 	custom_mlx_pixel_put(img, px_x, px_y, color2);
+// 			int iter = ft_check_point_m(state, curr_x, curr_y);
+// 			if (iter == 90)
+// 				custom_mlx_pixel_put(state, px_x, px_y, color2);
+// 			else
+// 				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 + iter*iter*1000);
+// 				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter);
+// 			px_y += 1;
+// 			// color += 1;
+// 			curr_y -= state->y_step;
+// 		}
+// 		// color += 0x00010000;
+// 		px_x += 1;
+// 		curr_x += state->x_step;
+// 	}
+// }
 
 // R = escape radius  # choose R > 0 such that R**2 - R >= sqrt(cx**2 + cy**2)
 
@@ -383,122 +384,157 @@ int	ft_check_point_j(t_state *state, double x, double y)
 	return (iter);
 }
 
-void	ft_julia(t_state	*state)
+// void	ft_julia(t_state	*state)
+// {
+// 	double	curr_x;
+// 	double	curr_y;
+// 	int		px_x;
+// 	int		px_y;
+// 	int color2;
+
+// 	px_x = 0;
+// 	px_y = 0;
+// 	curr_x = state->left;
+// 	curr_y = state->top;
+// 	color2 = 0x00000000;
+
+// 	while (px_x < state->width)
+// 	{
+// 		px_y = 0;
+// 		curr_y = state->top;
+// 		while (px_y < state->height)
+// 		{
+// 			int iter = ft_check_point_j(state, curr_x, curr_y);
+// 			if (iter == 90)
+// 				custom_mlx_pixel_put(state, px_x, px_y, color2);
+// 			else
+// 				// custom_mlx_pixel_put(state, px_x, px_y, pow(state->color1, 2) - pow(iter, 2));
+// 				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 / 90 * iter / 10 + 2 * iter*iter);
+// 				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
+// 				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
+// 			px_y += 1;
+// 			curr_y -= state->y_step;
+// 		}
+// 		// color += 0x00010000;
+// 		px_x += 1;
+// 		curr_x += state->x_step;
+// 	}
+// }
+
+// For each pixel (x, y) on the screen, do:
+// {
+//     x = scaled x coordinate of pixel (scaled to lie in the Mandelbrot X scale (-2.5, 1))
+//     y = scaled y coordinate of pixel (scaled to lie in the Mandelbrot Y scale (-1, 1))
+       
+    
+//     zx = x; // zx represents the real part of z
+//     zy = y; // zy represents the imaginary part of z
+
+  
+//     iteration = 0
+//     max_iteration = 1000
+  
+//     while (zx*zx + zy*zy < 4  AND  iteration < max_iteration) 
+//     {
+//         xtemp = zx*zx - zy*zy + x
+//         zy = -2*zx*zy + y
+//         zx = xtemp
+
+//         iteration = iteration + 1
+//     }
+
+//     if (iteration == max_iteration) //Belongs to the set
+//         return insideColor;
+
+//     return iteration * color;
+// }
+
+int	ft_check_point_t(t_state *state, double x, double y)
+{
+	// double	x;
+	// double	y;
+	int		iter;
+	double	x_temp;
+	(void)state;
+
+	// printf("R2: %f\n", r2);
+	iter = 0;
+	while (x * x + y * y <= 4 && iter < 90)
+	{
+		x_temp = x * x - y * y + x;
+		y = -2 * x * y + y;
+		x = x_temp;
+		iter += 1;
+	}
+	// printf("Iter: %d\n", iter);
+	return (iter);
+}
+
+// void	ft_tricorn(t_state	*state)
+// {
+// 	double	curr_x;
+// 	double	curr_y;
+// 	int		px_x;
+// 	int		px_y;
+// 	int color2;
+
+// 	px_x = 0;
+// 	px_y = 0;
+// 	curr_x = state->left;
+// 	curr_y = state->top;
+// 	color2 = 0x00000000;
+
+// 	while (px_x < state->width)
+// 	{
+// 		px_y = 0;
+// 		curr_y = state->top;
+// 		while (px_y < state->height)
+// 		{
+// 			int iter = ft_check_point_t(state, curr_x, curr_y);
+// 			if (iter == 90)
+// 				custom_mlx_pixel_put(state, px_x, px_y, color2);
+// 			else
+// 				// custom_mlx_pixel_put(state, px_x, px_y, pow(state->color1, 2) - pow(iter, 2));
+// 				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 / 90 * iter / 10 + 2 * iter*iter);
+// 				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
+// 				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
+// 			px_y += 1;
+// 			curr_y -= state->y_step;
+// 		}
+// 		// color += 0x00010000;
+// 		px_x += 1;
+// 		curr_x += state->x_step;
+// 	}
+// }
+
+void ft_iter_pixels(t_state *state)
 {
 	double	curr_x;
 	double	curr_y;
 	int		px_x;
 	int		px_y;
-	int color2;
 
 	px_x = 0;
-	px_y = 0;
+	px_y = -1;
 	curr_x = state->left;
 	curr_y = state->top;
-	color2 = 0x00000000;
-
 	while (px_x < state->width)
 	{
 		px_y = 0;
 		curr_y = state->top;
-		while (px_y < state->height)
+		while (px_y++ < state->height)
 		{
-			int iter = ft_check_point_j(state, curr_x, curr_y);
-			if (iter == 90)
-				custom_mlx_pixel_put(state, px_x, px_y, color2);
+			state->iter = state->ft_check_point(state, curr_x, curr_y);
+			if (state->iter == 90)
+				custom_mlx_pixel_put(state, px_x, px_y, state->color2);
 			else
-				// custom_mlx_pixel_put(state, px_x, px_y, pow(state->color1, 2) - pow(iter, 2));
-				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 / 90 * iter / 10 + 2 * iter*iter);
-				// custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
-				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * iter / 10);
-			px_y += 1;
+				custom_mlx_pixel_put(state, px_x, px_y, state->color1 * state->iter / 10);
+			// px_y += 1;
 			curr_y -= state->y_step;
 		}
-		// color += 0x00010000;
 		px_x += 1;
 		curr_x += state->x_step;
 	}
-}
-
-double ft_tri_area(double a[2], double b[2], double c[2])
-{
-	double area;
-
-	area = 0.5 * fabs(a[0] * (b[1] - c[1]) 
-				+ b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1]));
-	return (area);
-}
-
-int	ft_check_point_s(double a[2], double b[2], double c[2], double dot[2])
-{
-	double u;
-	double v;
-	double w;
-
-	u = ft_tri_area(b, c, dot) / ft_tri_area(a, b, c);
-	v = ft_tri_area(c, a, dot) / ft_tri_area(a, b, c);
-	w = ft_tri_area(a, b, dot) / ft_tri_area(a, b, c);
-	if ((u > 0 && u <= 1) && (v > 0 && v <= 1) && (w > 0 && w <= 1) && (u + v + w <= 1.0000000000000001))
-		return (1);
-	return (0);
-}
-
-int	ft_serp_hole(double a[2], double b[2], double c[2], t_state *state)
-{
-	if (state->iter == 10)
-	{
-		state->iter = 0;
-		return (0);
-	}
-	state->d[0] = (c[0] - a[0]) / 4 + a[0];
-	state->d[1] = (b[1] - a[1]) / 2 + a[1];
-	state->e[1] = state->d[1];
-	state->e[0] = c[0] - (c[0] - a[0]) / 4;
-	state->f[0] = b[0];
-	state->f[1] = a[1];
-
-	state->iter += 1;
-
-	// ft_serp_hole(state->d, b, state->e, state);
-	// ft_serp_hole(a, state->d, state->f, state);
-	// ft_serp_hole(state->f, state->e, c, state);
-
-	return (0);
-}
-
-void ft_serpinski(t_state *state)
-{
-	double	curr[2];
-	int		px_x;
-	int		px_y;
-	int 	color2;
-	int		iter;
-
-	px_x = 0;
-	px_y = 0;
-	curr[0] = state->left;
-	curr[1] = state->top;
-	color2 = 0x00000000;
-	iter = 0;
-	iter++;
-	while (px_x < state->width && iter == 1)
-	{
-		px_y = 0;
-		curr[1] = state->top;
-		while (px_y < state->height)
-		{
-			if (ft_check_point_s(state->a, state->b, state->c, curr))
-				custom_mlx_pixel_put(state, px_x, px_y, color2);
-			else
-				custom_mlx_pixel_put(state, px_x, px_y, state->color1);
-			px_y += 1;
-			curr[1] -= state->y_step;
-		}
-		// color += 0x00010000;
-		px_x += 1;
-		curr[0] += state->x_step;
-	}
-	ft_serp_hole(state->a, state->b, state->c, state);
 }
 
 void	ft_output_fractal(t_state	*state)
@@ -507,7 +543,8 @@ void	ft_output_fractal(t_state	*state)
 	mlx_clear_window(state->mlx, state->win);
 	// ft_mandelbrot(state);
 	// ft_julia(state);
-	ft_serpinski(state);
+	// ft_tricorn(state);
+	ft_iter_pixels(state);
 	mlx_put_image_to_window(state->mlx, state->win, state->img, 0, 0);
 	ft_print_stats(state);
 	state->prev_x_step = state->x_step;
@@ -545,31 +582,13 @@ int	main(void)
 	state.mouse_x = 0;
 	state.mouse_y = 0;
 	// state.zoom = 1.1;
-/* 	// Mandelbrot
 	state.left = -2.00;
 	state.right = 2.00;
 	state.top = 2.00;
-	state.bottom = -2.00; */
+	state.bottom = -2.00;
 	//Julia
-	// state.left = -2.50;
-	// state.right = 2.50;
-	// state.top = 2.50;
-	// state.bottom = -2.50;
 	state.cx = -0.135;
 	state.cy = -0.721;
-
-	// Serpinski
-	state.left = -0.5;
-	state.right = 2.5;
-	state.top = 2.5;
-	state.bottom = -0.5;
-	state.a[0] = 0;
-	state.a[1] = 0;
-	state.b[0] = 1;
-	state.b[1] = sqrt(3);
-	state.c[0] = 2;
-	state.c[1] = 0;
-
 	
 	state.zoom_count = 0;
 	state.prev_x_step = 0;
@@ -577,12 +596,14 @@ int	main(void)
 	// state.color1 = 0x00000000;
 	// state.color1 = 0xFFFFFFFF;
 	state.color1 = 9999;
+	state.color2 = 0x00000000;
 
 	state.frame = 0;
 
 	state.pause = 1;
 	// state.fix = 0;
 
+	state.ft_check_point = ft_check_point_m;
 
 	state.mlx = mlx_init();
 	if (!state.mlx)
@@ -602,14 +623,6 @@ int	main(void)
 	}
 	state.addr = mlx_get_data_addr(state.img, &state.bits_per_pixel, &state.line_length,
 								&state.endian);
-								/*
-	custom_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
-	custom_mlx_pixel_put(&img, 5, 6, 0x00FF0000);
-	custom_mlx_pixel_put(&img, 5, 7, 0x00FF0000);
-	custom_mlx_pixel_put(&img, 5, 8, 0x00FF0000);
-	custom_mlx_pixel_put(&img, 5, 9, 0x00FF0000);
-	custom_mlx_pixel_put(&img, 5, 10, 0x00FF0000);
-								*/
 	// mlx_put_image_to_window(state.mlx, state.win, state.img, 0, 0);
 	ft_output_fractal(&state);
 
@@ -619,7 +632,6 @@ int	main(void)
 	mlx_hook(state.win, 17, 0L, ft_handle_close, &state);
 	
 	mlx_mouse_hook(state.win, ft_handle_mouse, &state);
-
 
 	mlx_loop_hook(state.mlx, render_next_frame, &state);
 	mlx_loop(state.mlx);

@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-MAC_FLAGS = -arch x86_64
+# MAC_FLAGS = -arch x86_64
 MLXFLAGS = -lmlx -framework OpenGL -framework AppKit
 # DEBUGFLAGS = -fsanitize=address -g -static-libsan
 

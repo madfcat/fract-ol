@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 18:45:24 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 19:02:00 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:14:39 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	ft_check_point_ship(t_state *state, double x0, double y0)
 	return (iter);
 }
 
-int	ft_check_point_baldebrot(t_state *state, double x, double y)
+int	ft_check_point_baldelbrot(t_state *state, double x, double y)
 {
 	int		iter;
 	double	magnitude;

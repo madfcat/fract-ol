@@ -1,17 +1,15 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-# MAC_FLAGS = -arch x86_64
 MLXFLAGS = -lmlx -framework OpenGL -framework AppKit
-# DEBUGFLAGS = -fsanitize=address -g -static-libsan
 
-NAME = program
+NAME = fractol
 HEADER = ft_fractol.h
 LIBFT_DIR = libft/
 LIBFT_NAME = libft.a
 MLX_DIR = mlx/
 MLX_NAME = libmlx.a
 
-SRCS = main.c
+SRCS = controls.c fractals.c ft_atod.c main.c render.c texts.c
 SRCS_DIR = srcs/
 OBJS = $(SRCS:.c=.o)
 OBJECTS = $(addprefix $(SRCS_DIR), $(OBJS))

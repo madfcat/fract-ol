@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 17:02:22 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/04 18:04:58 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:32:52 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,21 +82,3 @@ double	ft_atod(const char *str)
 	free(after);
 	return (result);
 }
-
-// int	main(void)
-// {
-// 	// printf("Output: %d\n", ft_atoi("-025"));
-// 	printf("Output: %lf\n", ft_atod("-0.231"));
-// 	printf("Output: %lf\n", ft_atod("-.730"));
-// 	printf("Output: %lf\n", ft_atod("-23"));
-// 	printf("Output: %lf\n", ft_atod("15"));
-// 	printf("Output: %lf\n", ft_atod("-23.4445"));
-// 	printf("Output: %lf\n", ft_atod("23.4445"));
-// 	printf("Output: %lf\n", ft_atod("23.4445.fdhgfdghfd"));
-// 	printf("Output: %lf\n", ft_atod("sdffsdfsd23.4445.fdhgfdghfd"));
-// 	printf("Output: %lf\n", ft_atod("--23.4445.fdhgfdghfd"));
-// 	printf("Output: %lf\n", ft_atod("-0.4445.fdhgfdghfd"));
-// 	printf("Output: %lf\n", ft_atod("-+0.4445.fdhgfdghfd"));
-// 	printf("Output: %lf\n", ft_atod(".4445.fdhgfdghfd"));
-// 	return (0);
-// }

@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 21:31:12 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 19:08:07 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:32:44 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_state {
 	double	prev_y_step;
 
 	int		iter;
+	int		max_iter;
 
 	double	left;
 	double	right;
@@ -104,5 +105,7 @@ void		ft_output_fractal(t_state	*state);
 int			render_next_frame(t_state *state);
 void		custom_mlx_pixel_put(t_state *state, int x, int y, int color);
 double		ft_atod(const char *str);
+void		ft_init_struct(t_state	*state);
+void		ft_init_mlx(t_state *state);
 
 #endif

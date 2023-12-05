@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 18:46:50 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 19:08:53 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:30:44 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ void	ft_wrong_args(void)
 {
 	ft_putstr_fd("Amount of arguments is wrong.\n", 1);
 	ft_putstr_fd("Syntax: ./fractol <mandelbrot | ", 1);
-	ft_putstr_fd("julia <x> <y> | tricorn | ship | baldelbrot>\n", 1);
-	ft_putstr_fd("For example: ./fractol julia -0.135 -0.721\n", 1);
+	ft_putstr_fd("julia <x> <y> | tricorn | ship | ", 1);
+	ft_putstr_fd("baldelbrot> <max_iteration>\n", 1);
+	ft_putstr_fd("For example: ./fractol julia -0.135 -0.721 90\n", 1);
 	exit(0);
 }
 

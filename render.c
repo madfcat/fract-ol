@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 18:53:05 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 19:04:30 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:27:13 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	ft_iter_pixels(t_state *state)
 		while (++px_y < state->height)
 		{
 			state->iter = state->ft_check_point(state, curr_x, curr_y);
-			if (state->iter == 90)
+			if (state->iter == state->max_iter)
 				custom_mlx_pixel_put(state, px_x, px_y, state->color2);
 			else
 				custom_mlx_pixel_put(state, px_x, px_y,

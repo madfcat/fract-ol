@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 19:47:01 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:31:55 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,48 +60,25 @@ void	custom_mlx_pixel_put(t_state *state, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	ft_init_struct(t_state	*state)
+void	ft_handle_argc_2_3(int argc, char *argv[], t_state *state, int len)
 {
-	state->width = 400;
-	state->height = 400;
-	state->zoom = 1;
-	state->mouse_x = 0;
-	state->mouse_y = 0;
-	state->left = -2.00;
-	state->right = 2.00;
-	state->top = 2.00;
-	state->bottom = -2.00;
-	state->zoom_count = 0;
-	state->prev_x_step = 0;
-	state->prev_y_step = 0;
-	state->color1 = 0x0000270F;
-	state->color2 = 0x00000000;
-	state->frame = 0;
-	state->pause = 1;
-	state->scale = 3;
-}
-
-void	ft_init_mlx(t_state *state)
-{
-	state->mlx = mlx_init();
-	if (!state->mlx)
-		exit(0);
-	state->win = mlx_new_window(state->mlx, state->width,
-			state->height, "Fract-ol");
-	if (!state->win)
+	state->max_iter = 90;
+	if (!ft_strncmp(argv[1], "mandelbrot", len))
+		state->ft_check_point = ft_check_point_mandelbrot;
+	else if (!ft_strncmp(argv[1], "tricorn", len))
+		state->ft_check_point = ft_check_point_tricorn;
+	else if (!ft_strncmp(argv[1], "ship", len))
+		state->ft_check_point = ft_check_point_ship;
+	else if (!ft_strncmp(argv[1], "baldelbrot", len))
+		state->ft_check_point = ft_check_point_baldelbrot;
+	else
+		ft_wrong_args();
+	if (argc == 3)
 	{
-		free(state->mlx);
-		exit(0);
+		state->max_iter = ft_atoi(argv[2]);
+		if (state->max_iter == 0)
+			ft_wrong_args();
 	}
-	state->img = mlx_new_image(state->mlx, state->width, state->height);
-	if (!state->img)
-	{
-		free(state->mlx);
-		free(state->win);
-		exit(0);
-	}
-	state->addr = mlx_get_data_addr(state->img,
-			&state->bits_per_pixel, &state->line_len, &state->endian);
 }
 
 void	ft_handle_argcargv(int argc, char *argv[], t_state *state)
@@ -112,20 +89,20 @@ void	ft_handle_argcargv(int argc, char *argv[], t_state *state)
 		ft_wrong_args();
 	state->type = argv[1];
 	len = ft_strlen(argv[1]);
-	if (!ft_strncmp(argv[1], "mandelbrot", len) && argc == 2)
-		state->ft_check_point = ft_check_point_mandelbrot;
-	else if (!ft_strncmp(argv[1], "julia", len) && argc == 4)
+	if (argc == 2 || argc == 3)
+		ft_handle_argc_2_3(argc, argv, state, len);
+	else if (!ft_strncmp(argv[1], "julia", len) && (argc == 4 || argc == 5))
 	{
 		state->cx = ft_atod(argv[2]);
 		state->cy = ft_atod(argv[3]);
 		state->ft_check_point = ft_check_point_julia;
+		if (argc == 5)
+		{
+			state->max_iter = ft_atoi(argv[4]);
+			if (state->max_iter == 0)
+				ft_wrong_args();
+		}
 	}
-	else if (!ft_strncmp(argv[1], "tricorn", len) && argc == 2)
-		state->ft_check_point = ft_check_point_tricorn;
-	else if (!ft_strncmp(argv[1], "ship", len) && argc == 2)
-		state->ft_check_point = ft_check_point_ship;
-	else if (!ft_strncmp(argv[1], "baldelbrot", len) && argc == 2)
-		state->ft_check_point = ft_check_point_baldelbrot;
 	else
 		ft_wrong_args();
 }

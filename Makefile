@@ -9,7 +9,7 @@ LIBFT_NAME = libft.a
 MLX_DIR = mlx/
 MLX_NAME = libmlx.a
 
-SRCS = controls.c fractals.c ft_atod.c main.c render.c texts.c
+SRCS = controls.c fractals.c ft_atod.c init.c main.c render.c texts.c
 SRCS_DIR = srcs/
 OBJS = $(SRCS:.c=.o)
 OBJECTS = $(addprefix $(SRCS_DIR), $(OBJS))

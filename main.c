@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 20:31:55 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:40:57 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	custom_mlx_pixel_put(t_state *state, int x, int y, int color)
 
 void	ft_handle_argc_2_3(int argc, char *argv[], t_state *state, int len)
 {
-	state->max_iter = 90;
 	if (!ft_strncmp(argv[1], "mandelbrot", len))
 		state->ft_check_point = ft_check_point_mandelbrot;
 	else if (!ft_strncmp(argv[1], "tricorn", len))
@@ -76,7 +75,7 @@ void	ft_handle_argc_2_3(int argc, char *argv[], t_state *state, int len)
 	if (argc == 3)
 	{
 		state->max_iter = ft_atoi(argv[2]);
-		if (state->max_iter == 0)
+		if (state->max_iter <= 0)
 			ft_wrong_args();
 	}
 }
@@ -85,6 +84,7 @@ void	ft_handle_argcargv(int argc, char *argv[], t_state *state)
 {
 	int	len;
 
+	state->max_iter = 90;
 	if (argc < 2)
 		ft_wrong_args();
 	state->type = argv[1];
@@ -99,7 +99,7 @@ void	ft_handle_argcargv(int argc, char *argv[], t_state *state)
 		if (argc == 5)
 		{
 			state->max_iter = ft_atoi(argv[4]);
-			if (state->max_iter == 0)
+			if (state->max_iter <= 0)
 				ft_wrong_args();
 		}
 	}

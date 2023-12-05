@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 18:53:00 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:10:55 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,8 @@ void	ft_handle_argcargv(int argc, char *argv[], t_state *state)
 		state->ft_check_point = ft_check_point_tricorn;
 	if (!ft_strncmp(argv[1], "ship", ft_strlen(argv[1])))
 		state->ft_check_point = ft_check_point_ship;
-	if (!ft_strncmp(argv[1], "baldebrot", ft_strlen(argv[1])))
-		state->ft_check_point = ft_check_point_baldebrot;
+	if (!ft_strncmp(argv[1], "baldelbrot", ft_strlen(argv[1])))
+		state->ft_check_point = ft_check_point_baldelbrot;
 }
 
 int	main(int argc, char *argv[])

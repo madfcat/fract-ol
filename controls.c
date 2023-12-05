@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 13:31:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 19:03:41 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:12:21 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	ft_handle_numbers(int key, t_state *state)
 	}
 	if (key == KEY_5)
 	{
-		state->type = "baldebrot";
-		state->ft_check_point = ft_check_point_baldebrot;
+		state->type = "baldelbrot";
+		state->ft_check_point = ft_check_point_baldelbrot;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 19:10:55 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:47:01 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,27 +106,28 @@ void	ft_init_mlx(t_state *state)
 
 void	ft_handle_argcargv(int argc, char *argv[], t_state *state)
 {
+	int	len;
+
 	if (argc < 2)
 		ft_wrong_args();
 	state->type = argv[1];
-	if (!ft_strncmp(argv[1], "mandelbrot", ft_strlen(argv[1])))
+	len = ft_strlen(argv[1]);
+	if (!ft_strncmp(argv[1], "mandelbrot", len) && argc == 2)
 		state->ft_check_point = ft_check_point_mandelbrot;
-	if (!ft_strncmp(argv[1], "julia", ft_strlen(argv[1])))
+	else if (!ft_strncmp(argv[1], "julia", len) && argc == 4)
 	{
-		if (argc != 4)
-		{
-			ft_wrong_args();
-		}
 		state->cx = ft_atod(argv[2]);
 		state->cy = ft_atod(argv[3]);
 		state->ft_check_point = ft_check_point_julia;
 	}
-	if (!ft_strncmp(argv[1], "tricorn", ft_strlen(argv[1])))
+	else if (!ft_strncmp(argv[1], "tricorn", len) && argc == 2)
 		state->ft_check_point = ft_check_point_tricorn;
-	if (!ft_strncmp(argv[1], "ship", ft_strlen(argv[1])))
+	else if (!ft_strncmp(argv[1], "ship", len) && argc == 2)
 		state->ft_check_point = ft_check_point_ship;
-	if (!ft_strncmp(argv[1], "baldelbrot", ft_strlen(argv[1])))
+	else if (!ft_strncmp(argv[1], "baldelbrot", len) && argc == 2)
 		state->ft_check_point = ft_check_point_baldelbrot;
+	else
+		ft_wrong_args();
 }
 
 int	main(int argc, char *argv[])

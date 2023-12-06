@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:14:07 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/06 13:52:59 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/06 14:22:12 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	custom_mlx_pixel_put(t_state *state, int x, int y, int color)
 
 void	ft_handle_argc_2_3(int argc, char *argv[], t_state *state, int len)
 {
-	if (!ft_strncmp(argv[1], "mandelbrot", len))
+	if (ft_strncmp(argv[1], "mandelbrot", len) == 0)
 		state->ft_check_point = ft_check_point_mandelbrot;
-	else if (!ft_strncmp(argv[1], "tricorn", len))
+	else if (ft_strncmp(argv[1], "tricorn", len) == 0)
 		state->ft_check_point = ft_check_point_tricorn;
-	else if (!ft_strncmp(argv[1], "ship", len))
+	else if (ft_strncmp(argv[1], "ship", len) == 0)
 		state->ft_check_point = ft_check_point_ship;
-	else if (!ft_strncmp(argv[1], "baldelbrot", len))
+	else if (ft_strncmp(argv[1], "baldelbrot", len) == 0)
 		state->ft_check_point = ft_check_point_baldelbrot;
 	else
 		ft_wrong_args();
@@ -56,10 +56,10 @@ void	ft_handle_argcargv(int argc, char *argv[], t_state *state)
 	if (argc < 2)
 		ft_wrong_args();
 	state->type = argv[1];
-	len = ft_strlen(argv[1]);
+	len = ft_strlen(argv[1]) + 1;
 	if (argc == 2 || argc == 3)
 		ft_handle_argc_2_3(argc, argv, state, len);
-	else if (!ft_strncmp(argv[1], "julia", len) && (argc == 4 || argc == 5))
+	else if (ft_strncmp(argv[1], "julia", len) == 0 && (argc == 4 || argc == 5))
 	{
 		state->cx = ft_atod(argv[2]);
 		state->cy = ft_atod(argv[3]);

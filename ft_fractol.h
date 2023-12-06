@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 21:31:12 by vshchuki          #+#    #+#             */
-/*   Updated: 2023/12/05 20:32:44 by vshchuki         ###   ########.fr       */
+/*   Updated: 2023/12/06 13:59:30 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,37 +30,28 @@ typedef struct s_state {
 	int		zoom_count;
 	int		mouse_x;
 	int		mouse_y;
-
 	double	x_step;
 	double	y_step;
 	double	prev_x_step;
 	double	prev_y_step;
-
 	int		iter;
 	int		max_iter;
-
 	double	left;
 	double	right;
 	double	top;
 	double	bottom;
-
 	int		color1;
 	int		color2;
-
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_len;
 	int		endian;
-
 	int		frame;
 	int		pause;
-
 	double	cx;
 	double	cy;
-
 	double	scale;
-
 	t_ft	ft_check_point;
 }				t_state;
 
